@@ -24,8 +24,8 @@ export class HeaderService {
           selected: false
         },
         {
-          label: 'Buscar reservar',
-          route: '',
+          label: 'Reservas',
+          route: 'reservas/crear',
           selected: false
         },
         {
