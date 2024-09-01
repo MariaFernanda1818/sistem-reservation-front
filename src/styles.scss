@@ -1,0 +1,65 @@
+/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  scroll-behavior: smooth;
+  margin: 0;
+  background-color: white;
+  height: 100%;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #87848491;
+  border-radius: 5px;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+:root {
+  /* Paleta de colores */
+  --bg-primary: #131417;
+  --bg-secondary: #1e1f26;
+  --color-primary: #2c303a;
+  --color-secondary: rgb(58, 58, 58);
+  --black: #000000;
+}
+
+mat-card {
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Estilos personalizados para el botón de inicio de sesión */
+.button-primary {
+  border: 1px solid #000 !important; /* Bordes negros */
+  color: #000 !important; /* Texto negro */
+  background-color: #fff !important; /* Fondo blanco */
+  transition: background-color 0.3s ease !important; /* Transición suave del color de fondo */
+}
+
+.button-primary:hover {
+  background-color: #000 !important; /* Fondo negro al pasar el cursor sobre el botón */
+  color: #fff !important; /* Texto blanco al pasar el cursor sobre el botón */
+}
+
+/* Estilos personalizados para el botón de cancelar */
+.cancel-button {
+  border: 2px solid #B00020 !important; /* Bordes rojos */
+  color: #B00020 !important; /* Texto rojo */
+  background-color: #fff !important; /* Fondo blanco */
+  transition: background-color 0.3s ease !important; /* Transición suave del color de fondo */
+}
+
+.cancel-button:hover {
+  background-color: #B00020 !important; /* Fondo rojo al pasar el cursor sobre el botón */
+  color: #fff !important; /* Texto blanco al pasar el cursor sobre el botón */
+}
+

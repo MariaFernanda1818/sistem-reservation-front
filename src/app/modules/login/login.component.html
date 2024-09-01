@@ -1,0 +1,42 @@
+<div class="container-login">
+  <mat-card>
+    <h1>Iniciar sesión</h1>
+    
+    <div class="line-login"></div>
+
+    <div class="content-login">
+      <form [formGroup]="formLogin">
+        <div class="row">
+          <div class="form-field mt-2 mb-2">
+            <mat-form-field fxFlex="100" fxFlex.lt-sm="100" appearance="outline">
+              <mat-label>Correo electrónico :</mat-label>
+              <input matInput type="text" formControlName="emailUser" />
+              <mat-error *ngFor="let errorMessage of errorHandlerService.getErrorMessages(formLogin, 'emailUser')">
+                {{ errorMessage }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-field mt-2 mb-2">
+            <mat-form-field fxFlex="100" fxFlex.lt-sm="100" appearance="outline">
+              <mat-label>Contraseña :</mat-label>
+              <input matInput type="password" formControlName="password" [type]="hide ? 'password' : 'text'"/>
+              <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              <mat-error *ngFor="let errorMessage of errorHandlerService.getErrorMessages(formLogin, 'password')">
+                {{ errorMessage }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="mt-4">
+          <a routerLink="/registro" class="link" >¿Aún no tienes tu cuenta?</a>
+        </div>
+        <br>
+        <button type="submit" mat-raised-button color="primary" class="button-primary" (click)="loginUser(formLogin)" >Iniciar sesión</button>
+      </form>
+    </div>
+  </mat-card>
+</div>
+
+<!-- <button type='button' mat-raised-button class="cancel-button" (click)="cancelAction()">Cancelar</button> -->

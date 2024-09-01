@@ -1,0 +1,73 @@
+.container-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem;
+}
+
+mat-card {
+  width: 500px; /* Ancho del card */
+  padding: 40px; /* Espacio interno del card */
+  border-radius: 10px; /* Bordes redondeados */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Sombra */
+  text-align: center; /* Centrar contenido */
+}
+
+h1 {
+  margin-bottom: 20px; /* Espaciado inferior del título */
+  font-size: 24px; /* Tamaño de fuente del título */
+  color: #333; /* Color del texto */
+}
+
+.line-login {
+  width: 100%;
+  height: 2px; /* Altura de la línea */
+  background-color: #333;
+  margin-bottom: 20px; /* Espaciado inferior de la línea */
+}
+
+.content-login {
+  margin-top: 20px; /* Espaciado superior del contenido del formulario */
+}
+
+/* Estilos para los campos de formulario */
+mat-form-field {
+  width: 100%; /* Ancho del campo de formulario */
+}
+
+/* Ajustes de estilo para el texto de los labels */
+.mat-form-field-label {
+  color: #666; /* Color del texto del label */
+  font-size: 14px; /* Tamaño de fuente del label */
+}
+
+/* Ajustes de estilo para los inputs */
+.mat-input-element {
+  border-radius: 5px; /* Bordes redondeados del input */
+  background-color: #f5f5f5; /* Color de fondo del input */
+  border: none; /* Eliminar borde del input */
+  padding: 10px; /* Espaciado interno del input */
+  color: #333; /* Color del texto del input */
+}
+
+.mat-input-element::placeholder {
+  color: #aaa; /* Color del texto de placeholder */
+}
+
+/* Estilos para el mensaje de error */
+.mat-error {
+  font-size: 12px; /* Tamaño de fuente del mensaje de error */
+  color: #d9534f; /* Color del mensaje de error */
+  margin-top: 4px; /* Espacio superior del mensaje de error */
+}
+
+.link {
+  color: black; /* Cambiar color del texto a negro */
+  text-decoration: none; /* Eliminar subrayado predeterminado */
+  text-decoration-skip-ink: none; /* Evitar que la línea se salte las letras */
+  position: relative; /* Establecer posición relativa para poder posicionar la línea */
+}
+
+.link:hover {
+  text-decoration: underline; /* Agregar subrayado al pasar el cursor */
+}

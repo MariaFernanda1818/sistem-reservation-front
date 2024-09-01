@@ -1,0 +1,13 @@
+<header>
+  <div class="headertitle">
+    <h1>RESERVA RESTAURANTE Y HOTELES</h1>
+  </div>
+  <div class="headerbuttons">
+    <button 
+      *ngFor="let item of listItemNavBar" 
+      (click)="redireccionar(item)"
+      [ngClass]="{'selected': item.selected }" >
+      {{ item.label }}
+    </button>
+  </div>
+</header>
