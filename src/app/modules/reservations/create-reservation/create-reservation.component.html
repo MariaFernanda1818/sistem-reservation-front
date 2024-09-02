@@ -1,0 +1,68 @@
+<div class="row container">
+    <form [formGroup]="formCreateReservation" >
+        <div class="col-md-6">
+            <p>
+                Selecciona el tipo de reserva:
+                <mat-button-toggle-group (change)="buscarAfiliados()" formControlName="tipoReserva" name="tipoReserva" aria-label="Tipos de reserva">
+                    <mat-button-toggle value="restaurantes">Restaurantes</mat-button-toggle>
+                    <mat-button-toggle value="hoteles">Hoteles</mat-button-toggle>
+                </mat-button-toggle-group>
+            </p>
+
+            <h1>Reservar</h1>
+            <h3>
+                Las puertas de nuestros {{formCreateReservation.get('tipoReserva')?.value}} siempre están abiertas pero nunca sobra ser precavido y reservar una mesa.
+            </h3>
+
+            <div class="form-field mt-2 mb-2">
+                <mat-form-field appearance="outline" >
+                    <mat-label>Fecha inicio reserva</mat-label>
+                    <input (dateChange)="verificarRangoFecha()"  matInput [matDatepicker]="picker1" formControlName="fechaInicioReserva" [min]="today">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                    <mat-error *ngFor="let errorMessage of errorHandlerService.getErrorMessages(formCreateReservation, 'fechaInicioReserva')">
+                        {{ errorMessage }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="form-field mt-2 mb-2">
+                <mat-form-field appearance="outline">
+                    <mat-label>Fecha fin reserva</mat-label>
+                    <input matInput [matDatepicker]="picker2" formControlName="fechaFinReserva" [min]="minEndDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                    <mat-error *ngFor="let errorMessage of errorHandlerService.getErrorMessages(formCreateReservation, 'fechaFinReserva')">
+                        {{ errorMessage }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            
+        </div>
+        <div class="col col-md-6">
+            <span>Elige el establecimiento a reservar:</span>
+            <div class="row m-2" >
+                <div class="afiliado col-md-12" >
+                    <mat-card class="m-2 p-2" 
+                        *ngFor="let afiliado of listAfiliadoServicio; let idx = index" 
+                        (click)="seleccionarEstablecimiento(afiliado, idx)"
+                        [ngClass]="{'selected': aplicarSeleccion() === idx }" >
+                        <h3><b>{{afiliado.nombreAfiliado}}</b></h3>
+                        <div *ngFor="let servicio of afiliado.servicios">
+                            <span><b>Servicios:</b> {{servicio.nombreServicio}} </span>
+                            <span><b>Precio:</b> ${{servicio.costoServicio}} </span>
+
+                        </div>
+                    </mat-card>
+                </div>
+            </div>
+            
+        
+            <button type="submit" 
+                mat-raised-button 
+                color="primary" 
+                class="button-primary" 
+                (click)="crearReserva(formCreateReservation)" >Consultar disponibilidad</button>
+        </div>
+    </form>
+</div>

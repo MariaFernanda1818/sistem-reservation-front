@@ -60,24 +60,6 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="form-field mt-2 mb-2">
-              <mat-form-field fxFlex="100" fxFlex.lt-sm="100" appearance="outline">
-                <mat-label>Telefono :</mat-label>
-                <input matInput type="text" formControlName="phoneNumber" />
-                <mat-error *ngFor="let errorMessage of errorHandlerService.getErrorMessages(formRegister, 'phoneNumber')">
-                  {{ errorMessage }}
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <div class="form-field mt-2 mb-2">
-              <mat-form-field fxFlex="100" fxFlex.lt-sm="100" appearance="outline">
-                <mat-label>Documento :</mat-label>
-                <input matInput type="text" formControlName="numberDocumentUser" />
-                <mat-error *ngFor="let errorMessage of errorHandlerService.getErrorMessages(formRegister, 'numberDocumentUser')">
-                  {{ errorMessage }}
-                </mat-error>
-              </mat-form-field>
-            </div>
           </div>
           <div class="mt-4">
             <a routerLink="/inicio-sesion" class="link" >¿Ya tienes una cuenta?</a>

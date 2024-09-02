@@ -20,12 +20,12 @@ export class HeaderService {
         // },
         {
           label: 'Mis reservas',
-          route: '',
+          route: 'reservas/reservas',
           selected: false
         },
         {
-          label: 'Buscar reservar',
-          route: '',
+          label: 'Reservas',
+          route: 'reservas/crear',
           selected: false
         },
         {

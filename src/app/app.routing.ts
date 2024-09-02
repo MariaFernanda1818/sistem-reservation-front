@@ -15,6 +15,10 @@ export const APP_ROUTES: Routes = [
         path: 'registro',
         loadChildren: () => import('./modules/register/register.module').then((m) => m.RegisterModule),
     },
+    {
+        path: 'reservas',
+        loadChildren: () => import('./modules/reservations/reservations.module').then(m => m.ReservationsModule),
+    },
     // {
     //     path: '',
     //     component: AppComponent,

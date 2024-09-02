@@ -1,0 +1,33 @@
+<div class="container-reservation row col-md-12">
+    <form [formGroup]="formModifyReservation" >
+        <div class="form-field mt-2 mb-2">
+            <mat-form-field appearance="outline" >
+                <mat-label>Fecha inicio reserva</mat-label>
+                <input (dateChange)="verificarRangoFecha()"  matInput [matDatepicker]="picker1" formControlName="fechaInicioReserva" [min]="today">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+                <mat-error *ngFor="let errorMessage of errorHandlerService.getErrorMessages(formModifyReservation, 'fechaInicioReserva')">
+                    {{ errorMessage }}
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="form-field mt-2 mb-2">
+            <mat-form-field appearance="outline">
+                <mat-label>Fecha fin reserva</mat-label>
+                <input matInput [matDatepicker]="picker2" formControlName="fechaFinReserva" [min]="minEndDate">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+                <mat-error *ngFor="let errorMessage of errorHandlerService.getErrorMessages(formModifyReservation, 'fechaFinReserva')">
+                    {{ errorMessage }}
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <button type="submit" 
+            mat-raised-button 
+            color="primary" 
+            class="button-primary" 
+            (click)="modificarReserva(formModifyReservation)" >Consultar disponibilidad</button>
+    </form>
+</div>

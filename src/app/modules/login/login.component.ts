@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { emailValidator } from '@common/helpers/validators/formats.validator';
-import { Role } from '@sharedModule/enums/Role.enum';
-import { ILoginUser } from '@sharedModule/models/ILoginUser';
+import { ICliente } from '@sharedModule/models/ICliente';
+import { ILoginUser } from '@sharedModule/models/ILoginClient';
 import { AuthService } from '@sharedModule/service/auth.service';
+import { Base64Service } from '@sharedModule/service/base64.service';
 import { ErrorHandlerService } from '@sharedModule/service/errorHandler.service';
+import { SubjectService } from '@sharedModule/service/subject.service';
 import { UtilitiesService } from '@sharedModule/service/utilitiesSevice.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { catchError, finalize, of, tap } from 'rxjs';
@@ -18,13 +20,15 @@ import { catchError, finalize, of, tap } from 'rxjs';
 export class LoginComponent implements OnInit {
 
   public hide = true;
-  public formLogin!: FormGroup ;
+  public formLogin!: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
     public readonly errorHandlerService: ErrorHandlerService,
     private authService: AuthService,
     private utilitiesService: UtilitiesService,
+    private base64Service: Base64Service,
+    private subjectService: SubjectService,
     private spinner: NgxSpinnerService
   ) {  }
 
@@ -55,18 +59,20 @@ export class LoginComponent implements OnInit {
       return;
     }
     const { emailUser, password } = this.formLogin.value;
-    const objetUser: ILoginUser = {
-      emailUser,
-      password,
-      role: Role.ADMIN
+    const objectClient: ILoginUser = {
+      correoCliente:emailUser,
+      contrasenaCliente:password,
     }
+    sessionStorage.removeItem('userToken');
     this.spinner.show(); // Show Spinner
-    this.authService.loginUser(objetUser).pipe(
+    this.authService.loginUser(objectClient).pipe(
       tap((data) => {
         if (data.error) {
-          this.utilitiesService.showErrorMessage(data.message, '', 'Aceptar')
+          this.utilitiesService.showErrorMessage(data.mensaje, '', 'Aceptar');
         } else {
-          this.utilitiesService.showSucessMessage(data.message, 'inicio-sesion', 'Aceptar')
+          const cliente = this.base64Service.objectoToBase64(data.data.cliente);
+          this.subjectService.setValueBase64(cliente);
+          this.utilitiesService.showSucessMessage(data.mensaje, 'inicio-sesion', 'Aceptar');
         }
       }),
       catchError((err) => {
