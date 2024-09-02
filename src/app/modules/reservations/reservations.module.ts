@@ -12,6 +12,7 @@ import { UtilitiesService } from '@sharedModule/service/utilitiesSevice.service'
 import { CreateReservationComponent } from './create-reservation/create-reservation.component';
 import { UserReservationComponent } from './user-reservation/user-reservation.component';
 import { ModifyReservationComponent } from './modify-reservation/modify-reservation.component';
+import { ReservaService } from '@sharedModule/service/reserva.service';
 
 @NgModule({
     imports: [
@@ -23,6 +24,6 @@ import { ModifyReservationComponent } from './modify-reservation/modify-reservat
     ],
     exports: [],
     declarations: [CreateReservationComponent, UserReservationComponent, ModifyReservationComponent],
-    providers: [AuthService, ErrorHandlerService, UtilitiesService],
+    providers: [AuthService, ReservaService, ErrorHandlerService, UtilitiesService],
 })
 export class ReservationsModule { }

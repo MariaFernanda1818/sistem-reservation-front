@@ -25,10 +25,10 @@ export class DefaultInterceptor implements HttpInterceptor {
   } {
     const res: { [name: string]: string } = {};
     if (headers?.has('Authorization')) {
-      const token = sessionStorage.getItem('userToken');
-      if (token) {
-        res['Authorization'] = 'Bearer '+token;
-      }
+      // const token = sessionStorage.getItem('userToken');
+      // if (token) {
+      //   res['Authorization'] = 'Bearer '+token;
+      // }
     }
     return res;
   }
@@ -53,8 +53,10 @@ export class DefaultInterceptor implements HttpInterceptor {
 
     if (event.body?.data?.token) {
       sessionStorage.setItem('userToken', event.body.data.token);
+      sessionStorage.setItem('cliente', JSON.stringify(event.body.data.cliente));
       console.log("token...", event.body.data.token);
     }
+
     if (event instanceof HttpResponse) {
       event = event.clone({ body: event.body.response });
     }

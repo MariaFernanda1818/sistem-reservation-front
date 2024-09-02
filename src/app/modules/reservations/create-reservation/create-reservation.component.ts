@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { DateAdapter } from '@angular/material/core';
 import { IAfiliado } from '@sharedModule/models/IAfiliado';
-import { IAfiliadoServicio } from '@sharedModule/models/IAfiliadoServicio';
 import { ICliente } from '@sharedModule/models/ICliente';
 import { IReserva } from '@sharedModule/models/IReserva';
+import { IResponseAfiliadoServicio } from '@sharedModule/models/IResponseAfiliadoServicio';
+import { ITipoAfiliado } from '@sharedModule/models/ITipoAfiliado';
+import { Base64Service } from '@sharedModule/service/base64.service';
 import { ErrorHandlerService } from '@sharedModule/service/errorHandler.service';
 import { ReservaService } from '@sharedModule/service/reserva.service';
+import { SubjectService } from '@sharedModule/service/subject.service';
 import { UtilitiesService } from '@sharedModule/service/utilitiesSevice.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { catchError, finalize, of, tap } from 'rxjs';
@@ -24,12 +26,12 @@ export class CreateReservationComponent implements OnInit {
         fechaInicioReserva: new FormControl<Date>(new Date(), [Validators.required]),
         fechaFinReserva: new FormControl<Date>(new Date(), [Validators.required])
     });
-    public listAfiliadoServicio: Array<IAfiliadoServicio> = new Array();
-    public establecimientoSeleccionado: IAfiliadoServicio = new IAfiliadoServicio();
+    public listAfiliadoServicio: Array<IResponseAfiliadoServicio> = new Array();
+    public establecimientoSeleccionado: IResponseAfiliadoServicio = new IResponseAfiliadoServicio();
     public posicionSeleccionada!: number;
     public today: string = new Date().toISOString().split('T')[0];
     public minEndDate: Date = new Date();
-    private tipoAfiliado: number = 1;
+    private tipoAfiliado: number = 2;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -37,33 +39,23 @@ export class CreateReservationComponent implements OnInit {
         public readonly errorHandlerService: ErrorHandlerService,
         private utilitiesService: UtilitiesService,
         private spinner: NgxSpinnerService
-    ) { 
-        
-    }
+    ) { }
 
     ngOnInit() {
-        this.listAfiliadoServicio = [
-            new IAfiliadoServicio(),
-            new IAfiliadoServicio(),
-            new IAfiliadoServicio(),
-            new IAfiliadoServicio(),
-            new IAfiliadoServicio(),
-        ]
-        const SEND_DATA: IReserva = {
-            fechaFinReserva: new Date(),
-            fechaInicioReserva: new Date(),
-            costoTotalReserva: 0,
-            tipoAfiliadoReservaFk: new IAfiliado(),
-            clienteReservaFk: new ICliente()
-        }     
-        
+        this.buscarAfiliadosTipo()
+        this.verificarRangoFecha();
+    }
+
+    private buscarAfiliadosTipo(){
         this.spinner.show(); // Show Spinner
         this.reservaService.queryAllAfiliadosTipoAfiliados(this.tipoAfiliado).pipe(
             tap((data) => {
+                console.log(data);
               if (data.error) {
                 this.utilitiesService.showErrorMessage(data.mensaje, '', 'Aceptar');
               } else {
-                this.utilitiesService.showSucessMessage(data.mensaje, 'inicio-sesion', 'Aceptar');
+                this.listAfiliadoServicio = data.data;
+                this.utilitiesService.showSucessMessage(data.mensaje, '', 'Aceptar');
               }
             }),
             catchError((err) => {
@@ -73,27 +65,22 @@ export class CreateReservationComponent implements OnInit {
             }),
             finalize(() => this.spinner.hide() ) // Hiden Spinner
           ).subscribe();
-   
-        console.log(SEND_DATA);
-        console.log(this.listAfiliadoServicio);
-        this.verificarRangoFecha();
-        // this.buildFormCreateReservation();
     }
 
-    private buildFormCreateReservation() {
-        this.formCreateReservation = this.formBuilder.group({
-            tipoReserva: new FormControl<string>('restaurantes'),
-            fechaInicioReserva: new FormControl<Date>(new Date()),
-            fechaFinReserva: new FormControl<Date>(new Date()),
-            afiliado: new FormControl<IAfiliado>(new IAfiliado()),
-            cliente: new FormControl<ICliente>(new ICliente()),
-            costoTotal: new FormControl<number>(0)
-        });
-    }
-
-    seleccionarEstablecimiento(afiliado: IAfiliadoServicio, idx: number) {
+    seleccionarEstablecimiento(afiliado: IResponseAfiliadoServicio, idx: number) {
         this.establecimientoSeleccionado = afiliado;
         this.posicionSeleccionada = idx;
+    }
+
+    buscarAfiliados(){
+
+        console.log("Se busco");
+        if(this.formCreateReservation.get('tipoReserva')?.value == 'restaurantes'){
+            this.tipoAfiliado = 2
+        }else if(this.formCreateReservation.get('tipoReserva')?.value == 'hoteles'){
+            this.tipoAfiliado = 1
+        }
+        this.buscarAfiliadosTipo()
     }
 
     aplicarSeleccion() {
@@ -115,8 +102,66 @@ export class CreateReservationComponent implements OnInit {
             this.formCreateReservation.markAllAsTouched();
             return;
         }
+        const { codigoAfiliado } = this.establecimientoSeleccionado;
+        if (!codigoAfiliado) {
+            this.utilitiesService.showErrorMessage('Debe seleccionar un establecimiento.', '', 'Aceptar');
+            return;
+        }
+        const cliente: ICliente = this.getObjectFromSessionStorage<ICliente>('cliente') || new ICliente();
+        const SEND_DATA: IReserva = {
+            fechaFinReserva: this.formCreateReservation.get("fechaFinReserva")?.value,
+            fechaInicioReserva: this.formCreateReservation.get("fechaInicioReserva")?.value,
+            costoTotalReserva: 0,
+            codigoReserva: null,
+            tipoAfiliadoReservaFk: {
+                idTipoAfiliado: this.tipoAfiliado,
+                nombreTipoAfiliado: this.formCreateReservation.get('tipoReserva')?.value.toUpperCase()
+            },
+            afiliadoReservaFk: {
+                codigoAfiliado: this.establecimientoSeleccionado.codigoAfiliado,
+                estadoAfiliado: '',
+                nombreAfiliado: '',
+                tipoAfiliadoFk: {
+                    idTipoAfiliado: this.tipoAfiliado,
+                    nombreTipoAfiliado: this.formCreateReservation.get('tipoReserva')?.value.toUpperCase()
+                }
+            },
+            clienteReservaFk: cliente
+        }     
+        
+        this.reservaService.createReservation(SEND_DATA).pipe(
+            tap((data) => {
+                console.log(data);
+              if (data.error) {
+                this.utilitiesService.showErrorMessage(data.mensaje, '', 'Aceptar');
+              } else {
+                this.listAfiliadoServicio = data.data;
+                this.utilitiesService.showSucessMessage(data.mensaje, '', 'Aceptar');
+              }
+            }),
+            catchError((err) => {
+              console.error("Error: ", err);
+              this.utilitiesService.showErrorMessage(err.message)
+              return of(null)
+            }),
+            finalize(() => this.spinner.hide() ) // Hiden Spinner
+          ).subscribe();
 
         // Logica implementar servicio
+    }
+
+    private getObjectFromSessionStorage<T>(key: string): T | null {
+        const item: string | null = sessionStorage.getItem(key);
+        if (item) {
+          try {
+            return JSON.parse(item) as T;
+          } catch (error) {
+            console.error(`Error al parsear el objeto desde sessionStorage con la clave "${key}":`, error);
+            sessionStorage.removeItem(key);
+            return null;
+          }
+        }
+        return null;
     }
 
 }

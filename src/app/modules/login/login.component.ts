@@ -4,7 +4,9 @@ import { emailValidator } from '@common/helpers/validators/formats.validator';
 import { ICliente } from '@sharedModule/models/ICliente';
 import { ILoginUser } from '@sharedModule/models/ILoginClient';
 import { AuthService } from '@sharedModule/service/auth.service';
+import { Base64Service } from '@sharedModule/service/base64.service';
 import { ErrorHandlerService } from '@sharedModule/service/errorHandler.service';
+import { SubjectService } from '@sharedModule/service/subject.service';
 import { UtilitiesService } from '@sharedModule/service/utilitiesSevice.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { catchError, finalize, of, tap } from 'rxjs';
@@ -25,6 +27,8 @@ export class LoginComponent implements OnInit {
     public readonly errorHandlerService: ErrorHandlerService,
     private authService: AuthService,
     private utilitiesService: UtilitiesService,
+    private base64Service: Base64Service,
+    private subjectService: SubjectService,
     private spinner: NgxSpinnerService
   ) {  }
 
@@ -66,6 +70,8 @@ export class LoginComponent implements OnInit {
         if (data.error) {
           this.utilitiesService.showErrorMessage(data.mensaje, '', 'Aceptar');
         } else {
+          const cliente = this.base64Service.objectoToBase64(data.data.cliente);
+          this.subjectService.setValueBase64(cliente);
           this.utilitiesService.showSucessMessage(data.mensaje, 'inicio-sesion', 'Aceptar');
         }
       }),

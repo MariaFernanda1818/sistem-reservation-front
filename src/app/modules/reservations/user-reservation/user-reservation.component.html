@@ -1,16 +1,16 @@
 <div class="container-reservation">
-    <mat-card>
+    <mat-card class="m-2" *ngFor="let reserva of listAfiliadoServicio" >
         <h1>Reserva</h1>
         
         <div class="line-reservation"></div>
     
-        <div class="content-reservation">
-            <h2>Restaurante</h2>
-            <h3>Precio</h3>
-            <h3>Fecha inicio reserva</h3>
-            <h3>Fecha fin reserva</h3>
-            <button type="button" mat-raised-button color="primary" class="m-2 button-primary" >Modificar reserva</button>
-            <button type="button" mat-raised-button color="primary" class="m-2 cancel-button" >Eliminar reserva</button>
+        <div class="content-reservation" >
+            <h2>{{reserva.codigoReserva}}</h2>
+            <h3><b>Precio:</b> reserva.costoTotalReserva</h3>
+            <h3><b>Fecha inicio reserva: </b> {{reserva.fechaInicioReserva}}</h3>
+            <h3><b>Fecha fin reserva:</b> {{reserva.fechaFinReserva}}  </h3>
+            <button type="button" mat-raised-button color="primary" class="m-2 button-primary" (click)="modificarReserva(reserva.codigoReserva!)" >Modificar reserva</button>
+            <button type="button" mat-raised-button color="primary" class="m-2 cancel-button" (click)="eliminarReserva(reserva.codigoReserva!)">Eliminar reserva</button>
         </div>
       </mat-card>
 </div>
