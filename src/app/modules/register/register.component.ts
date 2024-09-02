@@ -8,8 +8,7 @@ import { ErrorHandlerService } from '@sharedModule/service/errorHandler.service'
 import { catchError, finalize, of, tap } from 'rxjs';
 import { IUserRegister } from '@sharedModule/models/IUserRegister';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Role } from '@sharedModule/enums/Role.enum';
-
+import { ICliente } from '@sharedModule/models/ICliente';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -52,10 +51,8 @@ export class RegisterComponent implements OnInit {
         Validators.minLength(8),
         this.matchPasswordValidator()
       ]),
-      phoneNumber: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(10), onlyNumbers]),
       namesUser: new FormControl<string>('', [Validators.required, onlyLetters]),
-      lastNamesUser: new FormControl<string>('', [Validators.required, onlyLetters]),
-      numberDocumentUser: new FormControl<string>('', [Validators.required, Validators.maxLength(15),alphanumeric])
+      lastNamesUser: new FormControl<string>('', [Validators.required, onlyLetters])
     });
   }
 
@@ -79,23 +76,21 @@ export class RegisterComponent implements OnInit {
       return;
     }
     const { emailUser, numberDocumentUser, passwordUser, namesUser, lastNamesUser, phoneNumber } = this.formRegister.value;
-    const objetUser: IUserRegister = {
-      emailUser,
-      numberDocumentUser,
-      passwordUser,
-      namesUser,
-      lastNamesUser,
-      phoneNumber,
-      role: Role.ADMIN
+    const objetUser: ICliente = {
+      codigoCliente: '',
+      correoCliente: emailUser,
+      nombreCliente: namesUser,
+      apellidoCliente: lastNamesUser,
+      contrasenaCliente: passwordUser
     }
 
     this.spinner.show(); // Show Spinner
     this.authService.registerNewUser(objetUser).pipe(
       tap((data) => {
         if (data.error) {
-          this.utilitiesService.showErrorMessage(data.message, '', 'Aceptar')
+          this.utilitiesService.showErrorMessage(data.mensaje, '', 'Aceptar')
         } else {
-          this.utilitiesService.showSucessMessage(data.message, 'inicio-sesion', 'Aceptar')
+          this.utilitiesService.showSucessMessage(data.mensaje, 'inicio-sesion', 'Aceptar')
         }
       }),
       catchError((err) => {

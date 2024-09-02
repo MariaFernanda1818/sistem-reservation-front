@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ILoginUser } from '@sharedModule/models/ILoginUser';
+import { environment } from '@env/environment';
+import { ICliente } from '@sharedModule/models/ICliente';
+import { ILoginUser } from '@sharedModule/models/ILoginClient';
 import { IResponse } from '@sharedModule/models/IResponse';
 // import { environment } from '@env/environment';
 // import { ISafeAny } from '@sharedModule/models/ISafeAny';
@@ -11,19 +13,13 @@ import { Observable } from 'rxjs';
 export class AuthService {
     
     constructor(private httpClient: HttpClient) { }
-    
 
-    // public getAllUsers(): Observable<ISafeAny> {
-    //     // return this.httpClient.get<ISafeAny>(`${environment.api.getUsers}`);
-    //     return this.httpClient.get<ISafeAny>(`http://localhost:8080/users/all`);
-    // }
-
-    public registerNewUser(newUser: IUserRegister): Observable<IResponse> {
-        return this.httpClient.post<IResponse>(`http://localhost:8080/register`, newUser);
+    public registerNewUser(newClient: ICliente): Observable<IResponse> {
+        return this.httpClient.post<IResponse>(environment.api.getLoginRegister, newClient);
     }
 
-    public loginUser(user: ILoginUser): Observable<IResponse> {
-        return this.httpClient.post<IResponse>(`http://localhost:8080/login`, user);
+    public loginUser(newClient: ILoginUser): Observable<IResponse> {
+        return this.httpClient.post<IResponse>(environment.api.getAuthLogin, newClient);
     }
 
 }

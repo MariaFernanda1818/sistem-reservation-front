@@ -20,7 +20,7 @@ export class HeaderService {
         // },
         {
           label: 'Mis reservas',
-          route: '',
+          route: 'reservas/reservas',
           selected: false
         },
         {

@@ -51,9 +51,9 @@ export class DefaultInterceptor implements HttpInterceptor {
   private handleSuccessfulResponse(event: ISafeAny): HttpResponse<ISafeAny> {
     console.log('response at interceptor', event);
 
-    if (event.body?.token) {
-      sessionStorage.setItem('userToken', event.body.token);
-      console.log("token...", event.body.token);
+    if (event.body?.data?.token) {
+      sessionStorage.setItem('userToken', event.body.data.token);
+      console.log("token...", event.body.data.token);
     }
     if (event instanceof HttpResponse) {
       event = event.clone({ body: event.body.response });

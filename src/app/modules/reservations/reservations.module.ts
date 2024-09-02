@@ -10,6 +10,8 @@ import { ErrorHandlerService } from '@sharedModule/service/errorHandler.service'
 import { AuthService } from '@sharedModule/service/auth.service';
 import { UtilitiesService } from '@sharedModule/service/utilitiesSevice.service';
 import { CreateReservationComponent } from './create-reservation/create-reservation.component';
+import { UserReservationComponent } from './user-reservation/user-reservation.component';
+import { ModifyReservationComponent } from './modify-reservation/modify-reservation.component';
 
 @NgModule({
     imports: [
@@ -20,7 +22,7 @@ import { CreateReservationComponent } from './create-reservation/create-reservat
         RouterModule.forChild(RESERVATIONS_ROUTES)
     ],
     exports: [],
-    declarations: [CreateReservationComponent],
+    declarations: [CreateReservationComponent, UserReservationComponent, ModifyReservationComponent],
     providers: [AuthService, ErrorHandlerService, UtilitiesService],
 })
 export class ReservationsModule { }

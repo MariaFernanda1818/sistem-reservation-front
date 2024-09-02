@@ -1,0 +1,17 @@
+div.afiliado {
+    display: flex;
+}
+
+form {
+    display: flex;
+}
+
+.selected {
+    transform: scale(1.1);
+    background-color: #dfdfdf;
+}
+
+/* Estilos para los campos de formulario */
+mat-form-field {
+    width: 100%; /* Ancho del campo de formulario */
+}
